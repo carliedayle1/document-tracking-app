@@ -1,0 +1,21 @@
+{
+  "name": "document-tracking-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "post-update": "yarn upgrade --latest"
+  },
+  "dependencies": {
+    "mongoose": "5.12.0",
+    "next": "latest",
+    "next-auth": "3.13.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "swr": "0.5.3"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "description": "Document tracking web application"
+}
