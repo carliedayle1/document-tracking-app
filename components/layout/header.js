@@ -4,7 +4,13 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 export default function Header() {
   return (
     <header>
-      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar
+        bg="primary"
+        variant="dark"
+        fixed="top"
+        expand="lg"
+        collapseOnSelect
+      >
         <Container>
           <Link href="/">
             <Navbar.Brand style={{ cursor: "pointer" }}>
