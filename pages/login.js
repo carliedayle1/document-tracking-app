@@ -1,42 +1,65 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/client";
+import { useRouter } from "next/router";
 
 import { Form, Button } from "react-bootstrap";
 import FormContainer from "../components/layout/formcontainer";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit, errors } = useForm();
+  const router = useRouter();
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  async function submitHandler(data) {
+    const { email, password } = data;
+    console.log(data);
 
-    alert(`Email: ${email} Password: ${password}`);
-  };
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password
+    });
+
+    if (!result.ok) {
+      router.replace("/profile");
+    }
+  }
 
   return (
     <div style={{ marginTop: 150 }}>
       <FormContainer>
         <h3 className="text-center mb-4">Login</h3>
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={handleSubmit(submitHandler)}>
           <Form.Group controlId="email">
             <Form.Label> Email Address</Form.Label>
             <Form.Control
               type="email"
               placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              name="email"
+              ref={register({
+                required: true,
+                pattern: /^\S+@\S+$/i
+              })}
             ></Form.Control>
+            {errors.email && <p className="text-danger">Email is required</p>}
+            {errors.pattern && (
+              <p className="text-danger">
+                Email must have an '@' symbol/pattern
+              </p>
+            )}
           </Form.Group>
           <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
               placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              name="password"
+              ref={register({
+                required: true
+              })}
             ></Form.Control>
+            {errors.password && (
+              <p className="text-danger">Password is required</p>
+            )}
           </Form.Group>
           <div className="text-center">
             <Button type="submit">Submit</Button>
