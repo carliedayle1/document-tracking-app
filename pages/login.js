@@ -1,26 +1,28 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/client";
 import { useRouter } from "next/router";
 
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import FormContainer from "../components/layout/formcontainer";
 
 export default function Login() {
+  const [error, setError] = useState("");
   const { register, handleSubmit, errors } = useForm();
   const router = useRouter();
 
   async function submitHandler(data) {
-    const { email, password } = data;
-    console.log(data);
-
     const result = await signIn("credentials", {
       redirect: false,
-      email,
-      password
+      email: data.email,
+      password: data.password
     });
 
-    if (!result.ok) {
-      router.replace("/profile");
+    if (result.error) {
+      setError(result.error);
+    }
+    if (!result?.null) {
+      router.replace("/home");
     }
   }
 
@@ -39,6 +41,7 @@ export default function Login() {
                 required: true,
                 pattern: /^\S+@\S+$/i
               })}
+              onFocus={(e) => setError("")}
             ></Form.Control>
             {errors.email && <p className="text-danger">Email is required</p>}
             {errors.pattern && (
@@ -56,11 +59,13 @@ export default function Login() {
               ref={register({
                 required: true
               })}
+              onFocus={(e) => setError("")}
             ></Form.Control>
             {errors.password && (
               <p className="text-danger">Password is required</p>
             )}
           </Form.Group>
+          {error && <Alert variant="danger">{error}</Alert>}
           <div className="text-center">
             <Button type="submit">Submit</Button>
           </div>

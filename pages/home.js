@@ -1,7 +1,7 @@
 export default function HomePage() {
   return (
     <div className="d-flex">
-      <div class="sidenav bg-dark rounded">
+      <div className="sidenav bg-dark rounded">
         <div className="text-white px-3">
           <h3>Hello </h3>
         </div>

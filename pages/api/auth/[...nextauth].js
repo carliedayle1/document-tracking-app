@@ -13,15 +13,13 @@ export default NextAuth({
       async authorize(credentials) {
         await dbConnect();
 
-        const { email, password } = credentials;
-
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: credentials.email });
 
         if (!user) {
           throw new Error("Invalid email");
         }
 
-        if (!user.matchPassword(password)) {
+        if (!(await user.matchPassword(credentials.password))) {
           throw new Error("Invalid password");
         }
 
