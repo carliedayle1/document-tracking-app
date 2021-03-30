@@ -23,7 +23,7 @@ export default NextAuth({
           throw new Error("Invalid password");
         }
 
-        return { email: user.email };
+        return { email: user.email, name: user.name };
       }
     })
   ]

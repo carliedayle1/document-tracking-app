@@ -1,28 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/client";
+import { signIn, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 
 import { Form, Button, Alert } from "react-bootstrap";
 import FormContainer from "../components/layout/formcontainer";
+import Loader from "../components/layout/loader";
 
 export default function Login() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, errors } = useForm();
   const router = useRouter();
 
+  useEffect(() => {
+    getSession().then((session) => {
+      if (session) {
+        router.push("/home");
+      } else {
+        setIsLoading(false);
+      }
+    });
+  }, [router]);
+
   async function submitHandler(data) {
+    setIsLoading(true);
+
     const result = await signIn("credentials", {
       redirect: false,
       email: data.email,
       password: data.password
     });
 
+    setIsLoading(false);
+
     if (result.error) {
       setError(result.error);
     }
-    if (!result?.null) {
-      router.replace("/home");
+    if (!result.error) {
+      router.push("/home");
     }
   }
 
@@ -67,7 +83,7 @@ export default function Login() {
           </Form.Group>
           {error && <Alert variant="danger">{error}</Alert>}
           <div className="text-center">
-            <Button type="submit">Submit</Button>
+            {isLoading ? <Loader /> : <Button type="submit">Submit</Button>}
           </div>
         </Form>
       </FormContainer>

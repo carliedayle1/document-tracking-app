@@ -1,45 +1,40 @@
-export default function HomePage() {
-  return (
-    <div className="d-flex">
-      <div className="sidenav bg-dark rounded">
-        <div className="text-white px-3">
-          <h3>Hello </h3>
-        </div>
-      </div>
+import { useEffect } from "react";
+import { Container } from "react-bootstrap";
+import { getSession } from "next-auth/client";
+import { useRouter } from "next/router";
 
-      <div class="main">
-        <h2>Sidebar</h2>
-        <p>This sidebar is of full height (100%) and always shown.</p>
-        <p>Scroll down the page to see the result.</p>
-        <p>
-          Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum
-          definitiones no quo, maluisset concludaturque et eum, altera fabulas
-          ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
-          Affert laboramus repudiandae nec et. Inciderint efficiantur his ad.
-          Eum no molestiae voluptatibus.
-        </p>
-        <p>
-          Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum
-          definitiones no quo, maluisset concludaturque et eum, altera fabulas
-          ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
-          Affert laboramus repudiandae nec et. Inciderint efficiantur his ad.
-          Eum no molestiae voluptatibus.
-        </p>
-        <p>
-          Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum
-          definitiones no quo, maluisset concludaturque et eum, altera fabulas
-          ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
-          Affert laboramus repudiandae nec et. Inciderint efficiantur his ad.
-          Eum no molestiae voluptatibus.
-        </p>
-        <p>
-          Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum
-          definitiones no quo, maluisset concludaturque et eum, altera fabulas
-          ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
-          Affert laboramus repudiandae nec et. Inciderint efficiantur his ad.
-          Eum no molestiae voluptatibus.
-        </p>
-      </div>
-    </div>
+export default function HomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    getSession().then((session) => {
+      if (!session) {
+        router.push("/login");
+      }
+    });
+  }, [router]);
+
+  return (
+    <Container className="py-5">
+      <h1> Home Content here! </h1>
+      <p>Hello world!</p>
+    </Container>
   );
 }
+
+// export async function getServerSideProps(context) {
+//   const session = await getSession({ req: context.req });
+
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: { session },
+//   };
+// }

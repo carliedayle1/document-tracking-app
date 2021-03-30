@@ -2,7 +2,7 @@ import { Jumbotron, Button, Container } from "react-bootstrap";
 
 export default function IndexPage() {
   return (
-    <Container style={{ marginTop: "15%" }}>
+    <Container style={{ marginTop: "10%" }}>
       <Jumbotron>
         <h1>Hello, world!</h1>
         <p>
